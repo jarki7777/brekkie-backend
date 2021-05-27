@@ -21,5 +21,32 @@ export const userController = {
         } catch (e) {
             res.status(400).send({ 'Error': e.message });
         }
-    }
+    },
+    update: async (req, res) => {
+        try {
+            const id = req.params.id;
+            if (!id) res.status(400).send({ 'message': 'id is required' });
+
+            const payload = {
+                username: req.body.username,
+                email: req.body.email,
+                password: req.body.password,
+                role: req.body.role,
+                caloriesGoal: req.body.caloriesGoal,
+                inventory: req.body.inventory,
+                shoppingList: req.body.shoppingList,
+                favorites: req.body.favorites
+            }
+
+            Object.keys(payload).forEach(key => payload[key] === undefined ? delete payload[key] : {});
+
+            const modifiedUser = await User.findByIdAndUpdate({ _id: id }, { $set: payload });
+
+            console.log(modifiedUser)
+
+            res.sendStatus(202);
+        } catch (e) {
+            res.status(400).send({ 'Error': e.message });
+        }
+    },
 }

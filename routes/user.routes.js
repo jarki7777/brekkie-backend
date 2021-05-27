@@ -7,5 +7,6 @@ const userRoutes = Router();
 
 userRoutes.get('/index', checkJwt, checkMod, userController.index);
 userRoutes.get('/find/:id', checkJwt, checkMod, userController.show);
+userRoutes.patch('/find/:id', userController.update);
 
 export default userRoutes;
