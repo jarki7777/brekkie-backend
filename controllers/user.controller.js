@@ -9,7 +9,6 @@ export const userController = {
             const count = Math.ceil(await User.estimatedDocumentCount(userList) / 10);
             res.status(200).send({ pages: count, users: userList });
         } catch (e) {
-            console.log(e);
             res.status(400).send({ 'Error': e.message });
         }
     },
