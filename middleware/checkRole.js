@@ -1,13 +1,11 @@
 import Users from '../models/user.model.js';
 import jwt from 'jsonwebtoken';
+import { getTokenPayload } from '../util/getTokenPayload.js';
 
 export const checkAdmin = async (req, res, next) => {
     try {
-        const bearerHeader = req.headers['authorization'];
-        const bearer = bearerHeader.split(' ');
-        const bearerToken = bearer[1];
-        const token = jwt.decode(bearerToken);
-        const user = await Users.findById({ _id: token.id });
+        const payload = getTokenPayload(req.headers['authorization']);
+        const user = await Users.findById({ _id: payload.id });
 
         if (user.role === 'admin') next();
         else throw new Exception('Not admin');
@@ -18,11 +16,8 @@ export const checkAdmin = async (req, res, next) => {
 
 export const checkMod = async (req, res, next) => {
     try {
-        const bearerHeader = req.headers['authorization'];
-        const bearer = bearerHeader.split(' ');
-        const bearerToken = bearer[1];
-        const token = jwt.decode(bearerToken);
-        const user = await Users.findById({ _id: token.id });
+        const payload = getTokenPayload(req.headers['authorization']);
+        const user = await Users.findById({ _id: payload.id });
 
         if (user.role === 'mod' || user.role === 'admin') next();
         else throw new Exception('Not mod');

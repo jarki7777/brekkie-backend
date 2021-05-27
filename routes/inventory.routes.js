@@ -5,6 +5,6 @@ import { checkAdmin, checkMod } from '../middleware/checkRole.js';
 
 const inventoryRoutes = Router();
 
-inventoryRoutes.get('/', inventoryController.show);
+inventoryRoutes.get('/', checkJwt, inventoryController.show);
 
 export default inventoryRoutes;
