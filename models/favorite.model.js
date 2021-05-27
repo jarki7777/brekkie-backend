@@ -7,7 +7,7 @@ const FavoriteSchema = new mongoose.Schema({
         required: true,
         unique: true
     },
-    recipe: [{ 
+    recipes: [{ 
         type : mongoose.Types.ObjectId, 
         ref: 'Recipe',
         default: []
