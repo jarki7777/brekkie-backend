@@ -12,5 +12,14 @@ export const userController = {
             console.log(e);
             res.status(400).send({ 'Error': e.message });
         }
+    },
+    show: async (req, res) => {
+        try {
+            const id = req.params.id;
+            const user = await User.findById({ _id: id });
+            res.status(200).send({ user });
+        } catch (e) {
+            res.status(400).send({ 'Error': e.message });
+        }
     }
 }
