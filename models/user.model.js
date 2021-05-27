@@ -7,7 +7,7 @@ const UserSchema = new mongoose.Schema({
         unique: true,
         validate: {
             validator: function (v) {
-// username can't containg whitespaces must be between 4 and 20 characters,
+// username can't contain whitespaces must be between 4 and 20 characters,
 // can contain only letters, numbers and any of these non consecutive special characters '-._' 
                 return /^([a-z0-9]|[-._](?![-._])){4,20}$/i.test(v);
             },
