@@ -25,7 +25,6 @@ export const userController = {
     update: async (req, res) => {
         try {
             const id = req.params.id;
-            if (!id) res.status(400).send({ 'message': 'id is required' });
 
             const payload = {
                 username: req.body.username,
@@ -39,14 +38,19 @@ export const userController = {
             }
 
             Object.keys(payload).forEach(key => payload[key] === undefined ? delete payload[key] : {});
-
-            const modifiedUser = await User.findByIdAndUpdate({ _id: id }, { $set: payload });
-
-            console.log(modifiedUser)
-
+            await User.findByIdAndUpdate({ _id: id }, { $set: payload });
             res.sendStatus(202);
         } catch (e) {
             res.status(400).send({ 'Error': e.message });
         }
     },
+    delete: async (req, res) => {
+        try {
+            const id = req.params.id;
+            await User.findByIdAndDelete({ _id: id });
+            res.sendStatus(204);
+        } catch (e) {
+            res.status(400).send({ 'Error': e.message });
+        }
+    }
 }
