@@ -26,7 +26,6 @@ export const authController = {
                 res.status(201).send({ 'message': 'User created' });
             }
         } catch (e) {
-            console.log(e);
             res.status(400).send({ 'Error': e.message, 'message': 'All fields are required' });
         }
     },

@@ -5,4 +5,6 @@ import { checkRole } from '../middleware/checkRole.js';
 
 const userRoutes = Router();
 
+userRoutes.get('/index', checkJwt, checkRole, userController.index);
+
 export default userRoutes;
