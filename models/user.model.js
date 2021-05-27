@@ -29,15 +29,7 @@ const UserSchema = new mongoose.Schema({
     password: {
         type: String,
         required: true,
-        unique: true,
-        validate: {
-            validator: function (v) {
-// password must be between 8 and 32 characters, contain at least 1 lowercase letter,
-// 1 uppercase letter, 1 number and one of this special characters '#<>$+@$!%*?&'
-                return /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!#$%&?¿¡*-+.<>])[A-Za-z\d[!#$%&?¿¡*-+.<>]{8,32}$/gm.test(v);
-            },
-            message: props => `${props.value} is not a valid password`
-        }
+        unique: true
     },
     role: {
         type: String,
@@ -60,10 +52,7 @@ const UserSchema = new mongoose.Schema({
         type: mongoose.Types.ObjectId,
         ref: 'Favorites'
     },
-    foodLog: {
-        type: mongoose.Types.ObjectId,
-        ref: 'FoodLog'
-    }
+    phone: Number
 });
 
 const User = mongoose.model('User', UserSchema, 'users');
