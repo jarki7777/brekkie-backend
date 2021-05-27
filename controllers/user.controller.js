@@ -1,3 +1,7 @@
+import Inventory from '../models/inventory.model.js';
+import ShoppingList from '../models/shoppinglist.model.js';
+import Favorite from '../models/favorite.model.js'
+import FoodLog from '../models/foodLog.model.js';
 import User from '../models/user.model.js';
 
 export const userController = {
@@ -46,6 +50,10 @@ export const userController = {
     delete: async (req, res) => {
         try {
             const id = req.params.id;
+            await Inventory.findOneAndDelete({ user: id });
+            await ShoppingList.findOneAndDelete({ user: id });
+            await Favorite.findOneAndDelete({ user: id });
+            await FoodLog.findOneAndDelete({ user: id });
             await User.findByIdAndDelete({ _id: id });
             res.sendStatus(204);
         } catch (e) {
