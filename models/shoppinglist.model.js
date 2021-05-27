@@ -8,10 +8,11 @@ const ShoppingListSchema = new mongoose.Schema({
         unique: true
     },
     ingredients: {
-        type: Array
+        type: Array,
+        default: []
     }
 });
 
-const ShoppingList = mongoose.model('ShoppingList', ShoppingListSchema, 'shoppinglists');
+const ShoppingList = mongoose.model('ShoppingList', ShoppingListSchema, 'shopping_lists');
 
 export default ShoppingList;

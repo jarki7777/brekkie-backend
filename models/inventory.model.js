@@ -8,7 +8,8 @@ const InventorySchema = new mongoose.Schema({
         unique: true
     },
     ingredients: {
-        type: Array
+        type: Array,
+        default: []
     }
 });
 
