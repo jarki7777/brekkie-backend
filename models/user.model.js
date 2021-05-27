@@ -1,8 +1,8 @@
 import mongoose from 'mongoose';
 
 const UserSchema = new mongoose.Schema({
-    email: {
-        type: username,
+    username: {
+        type: String,
         required: true,
         unique: true,
         validate: {
@@ -50,19 +50,19 @@ const UserSchema = new mongoose.Schema({
     },
     inventory: {
         type: mongoose.Types.ObjectId,
-        ref: 'Inventories'
+        ref: 'Inventory'
     },
     shoppingList: {
         type: mongoose.Types.ObjectId,
-        ref: 'ShoppingLists'
+        ref: 'ShoppingList'
     },
     favorites: {
         type: mongoose.Types.ObjectId,
-        ref: 'favorites'
+        ref: 'Favorites'
     },
     foodLog: {
         type: mongoose.Types.ObjectId,
-        ref: 'foodLogs'
+        ref: 'FoodLog'
     }
 });
 
