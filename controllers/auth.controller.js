@@ -30,7 +30,6 @@ export const authController = {
             res.status(400).send({ 'Error': e.message, 'message': 'All fields are required' });
         }
     },
-
     login: async (req, res) => {
         try {
             const { email, password } = req.body;
@@ -41,11 +40,11 @@ export const authController = {
 
             const getRole = getUser.role;
             const jwtPayload = { id: getUser._id, getRole };
-            const token = jwt.sign(jwtPayload, process.env.JWT_SECRET);
+            const token = jwt.sign(jwtPayload, process.env.JWT_SECRET, { expiresIn: '7d' });
 
             if (getUser && checkPw) res.status(200).json({ token });
         } catch (e) {
             res.status(400).send({ 'Error': e.message, 'message': 'All fields are required' });
         }
-    }
+    }  
 }

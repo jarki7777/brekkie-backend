@@ -5,7 +5,7 @@ export const checkJwt = (req, res, next) => {
         const bearerHeader = req.headers['authorization'];
         const bearer = bearerHeader.split(' ');
         const bearerToken = bearer[1];
-        jwt.verify(bearerToken, process.env.SECRET);
+        jwt.verify(bearerToken, process.env.JWT_SECRET);
         next();
     } catch (e) {
         res.sendStatus(401);
