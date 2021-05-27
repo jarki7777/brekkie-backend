@@ -52,7 +52,10 @@ const UserSchema = new mongoose.Schema({
         type: mongoose.Types.ObjectId,
         ref: 'Favorites'
     },
-    phone: Number
+    foodLog: {
+        type: mongoose.Types.ObjectId,
+        ref: 'User'
+    }
 });
 
 const User = mongoose.model('User', UserSchema, 'users');

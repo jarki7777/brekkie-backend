@@ -6,6 +6,7 @@ const FoodLogSchema = new mongoose.Schema({
         ref: 'User',
         required: true
     },
+    day: Date,
     recipes: [{
         type: mongoose.Types.ObjectId,
         ref: 'Recipe',
