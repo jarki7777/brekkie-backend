@@ -51,7 +51,7 @@ const UserSchema = new mongoose.Schema({
     },
     favorites: {
         type: mongoose.Types.ObjectId,
-        ref: 'Favorites'
+        ref: 'Favorite'
     },
     foodLog: {
         type: mongoose.Types.ObjectId,

@@ -4,6 +4,7 @@ import Favorite from '../models/favorite.model.js'
 import FoodLog from '../models/foodLog.model.js';
 import Comment from '../models/comment.model.js';
 import User from '../models/user.model.js';
+import { getTokenPayload } from '../util/getTokenPayload.js';
 
 export const userController = {
     index: async (req, res) => {
@@ -20,6 +21,16 @@ export const userController = {
         try {
             const id = req.params.id;
             const user = await User.findById({ _id: id });
+            res.status(200).send({ user });
+        } catch (e) {
+            res.status(400).send({ 'Error': e.message });
+        }
+    },
+    profile: async (req, res) => {
+        try {
+            const tokenPayload = getTokenPayload(req.headers['authorization']);
+            const user = await User.findById({ _id: tokenPayload.id })
+            .populate('favorites inventory shoppingList', 'recipes');
             res.status(200).send({ user });
         } catch (e) {
             res.status(400).send({ 'Error': e.message });
