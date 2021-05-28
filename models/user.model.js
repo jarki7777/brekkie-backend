@@ -1,4 +1,5 @@
 import mongoose from 'mongoose';
+import mongoosePaginate from 'mongoose-paginate-v2';
 
 const UserSchema = new mongoose.Schema({
     username: {
@@ -58,6 +59,7 @@ const UserSchema = new mongoose.Schema({
     }
 });
 
+UserSchema.plugin(mongoosePaginate);
 const User = mongoose.model('User', UserSchema, 'users');
 
 export default User;
