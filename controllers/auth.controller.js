@@ -31,7 +31,7 @@ export const authController = {
                 const shoppingList = await ShoppingList.create({ user: newUser._id, ingredients: [] });
                 const favorites = await Favorite.create({ user: newUser._id, recipes: [] });
                 const foodLog = await FoodLog.create({ user: newUser._id, day: null, recipes: [], totalCalories: null, totalNutrients: {} });
-                
+
                 const payload = { inventory, shoppingList, favorites, foodLog }
                 await User.updateOne({ _id: newUser._id }, { $set: payload })
                 res.status(201).send({ 'message': 'User created' });
@@ -43,18 +43,27 @@ export const authController = {
     login: async (req, res) => {
         try {
             const { email, password } = req.body;
+
             const getUser = await User.findOne({ email: email });
-            const checkPw = bcrypt.compareSync(password, getUser.password);
+            let checkPw;
 
-            if (!getUser || !checkPw) res.status(404).send({ 'message': 'wrong credentials' });
-
-            const getRole = getUser.role;
-            const jwtPayload = { id: getUser._id, getRole };
-            const token = jwt.sign(jwtPayload, process.env.JWT_SECRET, { expiresIn: '7d' });
-
-            if (getUser && checkPw) res.status(200).json({ token });
+            if (!getUser) {
+                res.status(404).send({ 'message': 'wrong credentials' });
+                return
+            } else {
+                checkPw = bcrypt.compareSync(password, getUser.password);
+            }
+            if (!checkPw) {
+                res.status(404).send({ 'message': 'wrong credentials' });
+                return
+            } else {
+                const getRole = getUser.role;
+                const jwtPayload = { id: getUser._id, getRole };
+                const token = jwt.sign(jwtPayload, process.env.JWT_SECRET, { expiresIn: '7d' });
+                res.status(200).json({ token });
+            }
         } catch (e) {
             res.status(400).send({ 'Error': e.message, 'message': 'All fields are required' });
         }
-    }  
+    }
 }

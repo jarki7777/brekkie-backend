@@ -15,7 +15,7 @@ export const inventoryController = {
         try {
             const payload = getTokenPayload(req.headers['authorization']);
             const ingredients = req.body.ingredients;
-            await Inventory.updateOne({ user: payload.id}, { $addToSet: { ingredients: ingredients }});
+            await Inventory.updateOne({ user: payload.id }, { $addToSet: { ingredients: ingredients } });
             res.sendStatus(202);
         } catch (e) {
             res.status(400).send({ 'Error': e.message });
@@ -25,10 +25,21 @@ export const inventoryController = {
         try {
             const payload = getTokenPayload(req.headers['authorization']);
             const ingredients = req.body.ingredients;
-            await Inventory.updateOne({ user: payload.id}, { $pullAll: { ingredients: ingredients }});
+            await Inventory.updateOne({ user: payload.id }, { $pullAll: { ingredients: ingredients } });
             res.sendStatus(202);
         } catch (e) {
             res.status(400).send({ 'Error': e.message });
         }
+    },
+    empty: async (req, res) => {
+        try {
+            const payload = getTokenPayload(req.headers['authorization']);
+            await Inventory.updateOne({ user: payload.id }, { $set: { ingredienst: [] } });
+            res.sendStatus(202);
+        } catch (e) {
+            res.status(400).send({ 'Error': e.message });
+        }
+
+
     }
 }
