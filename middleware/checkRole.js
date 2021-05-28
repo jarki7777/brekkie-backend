@@ -22,6 +22,6 @@ export const checkMod = async (req, res, next) => {
         if (user.role === 'mod' || user.role === 'admin') next();
         else throw new Exception('Not mod');
     } catch (e) {
-        res.status(403).send({ 'message': 'User does not have the enough privileges' });
+        res.status(403).send({ 'message': 'User does not have enough privileges' });
     }
 }
