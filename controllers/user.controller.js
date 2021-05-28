@@ -41,6 +41,7 @@ export const userController = {
             }
 
             Object.keys(payload).forEach(key => payload[key] === undefined ? delete payload[key] : {});
+            
             await User.findByIdAndUpdate({ _id: id }, { $set: payload });
             res.sendStatus(202);
         } catch (e) {

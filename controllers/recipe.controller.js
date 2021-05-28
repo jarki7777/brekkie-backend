@@ -12,11 +12,10 @@ export const recipeController = {
     },
     index: async (req, res) => {
         try {
-            const skip = parseInt(req.query.skip);
+            const page = parseInt(req.query.page);
             const limit = parseInt(req.query.limit);
-            const recipeList = await Recipe.find().select().skip(skip).limit(limit);
-            const count = Math.ceil(await Recipe.estimatedDocumentCount(recipeList) / 10);
-            res.status(200).send({ pages: count, recipes: recipeList });
+            const recipeList = await Recipe.paginate({}, { page: page, limit: limit });
+            res.status(200).send(recipeList);
         } catch (e) {
             res.status(400).send({ 'Error': e.message });
         }

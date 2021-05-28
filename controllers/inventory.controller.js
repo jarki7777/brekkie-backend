@@ -4,8 +4,8 @@ import { getTokenPayload } from '../util/getTokenPayload.js';
 export const inventoryController = {
     show: async (req, res) => {
         try {
-            const payload = getTokenPayload(req.headers['authorization']);
-            const inventory = await Inventory.findOne({ user: payload.id }).populate('user', 'username email');
+            const tokenPayload = getTokenPayload(req.headers['authorization']);
+            const inventory = await Inventory.findOne({ user: tokenPayload.id }).populate('user', 'username email');
             res.status(200).send(inventory);
         } catch (e) {
             res.status(400).send({ 'Error': e.message });
@@ -13,9 +13,9 @@ export const inventoryController = {
     },
     add: async (req, res) => {
         try {
-            const payload = getTokenPayload(req.headers['authorization']);
+            const tokenPayload = getTokenPayload(req.headers['authorization']);
             const ingredients = req.body.ingredients;
-            await Inventory.updateOne({ user: payload.id }, { $addToSet: { ingredients: ingredients } });
+            await Inventory.updateOne({ user: tokenPayload.id }, { $addToSet: { ingredients: ingredients } });
             res.sendStatus(202);
         } catch (e) {
             res.status(400).send({ 'Error': e.message });
@@ -23,9 +23,9 @@ export const inventoryController = {
     },
     remove: async (req, res) => {
         try {
-            const payload = getTokenPayload(req.headers['authorization']);
+            const tokenPayload = getTokenPayload(req.headers['authorization']);
             const ingredients = req.body.ingredients;
-            await Inventory.updateOne({ user: payload.id }, { $pullAll: { ingredients: ingredients } });
+            await Inventory.updateOne({ user: tokenPayload.id }, { $pullAll: { ingredients: ingredients } });
             res.sendStatus(202);
         } catch (e) {
             res.status(400).send({ 'Error': e.message });
@@ -33,13 +33,11 @@ export const inventoryController = {
     },
     empty: async (req, res) => {
         try {
-            const payload = getTokenPayload(req.headers['authorization']);
-            await Inventory.updateOne({ user: payload.id }, { $set: { ingredienst: [] } });
+            const tokenPayload = getTokenPayload(req.headers['authorization']);
+            await Inventory.updateOne({ user: tokenPayload.id }, { $set: { ingredienst: [] } });
             res.sendStatus(202);
         } catch (e) {
             res.status(400).send({ 'Error': e.message });
         }
-
-
     }
 }
