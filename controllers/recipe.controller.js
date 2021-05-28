@@ -59,6 +59,7 @@ export const recipeController = {
             let inventory = userInventory.ingredients;
             inventory = inventory.map((i) => new RegExp(i, "i"));
 
+            // Find all recipes which inventory array intersects with the recipe ingredient
             const recipes = await Recipe.paginate(
                 {
                     $and: [
@@ -71,6 +72,46 @@ export const recipeController = {
             );
 
             res.status(200).send(recipes);
+        } catch (e) {
+            res.status(400).send({ 'Error': e.message });
+        }
+    },
+    update: async (req, res) => {
+        try {
+            const id = req.params.id;
+
+            const payload = {
+                title: req.body.title,
+                img: req.body.img,
+                prepTime: req.body.prepTime,
+                cookTime: req.body.cookTime,
+                totalTime: req.body.totalTime,
+                category: req.body.category,
+                method: req.body.method,
+                cuisine: req.body.cuisine,
+                description: req.body.description,
+                ingredients: req.body.ingredients,
+                instructions: req.body.instructions,
+                notes: req.body.notes,
+                serves: req.body.serves,
+                caloriesPerServe: req.body.caloriesPerServe,
+                nutritionalInfo: req.body.nutritionalInfo,
+                timesFavorite: req.body.timesFavorite,
+                oneStarVotes: req.body.oneStarVotes,
+                twoStarVotes: req.body.twoStarVotes,
+                threeStarVotes: req.body.threeStarVotes,
+                fourStarVotes: req.body.fourStarVotes,
+                fiveStarVotes: req.body.fiveStarVotes,
+                totalVotes: req.body.totalVotes,
+                calification: req.body.calification,
+                comments: req.body.comments
+            }
+
+            // Updates multiple fields, only update the fields for which query parameter isn't undefined
+            Object.keys(payload).forEach(key => payload[key] === undefined ? delete payload[key] : {});
+
+            await Recipe.findByIdAndUpdate({ _id: id }, { $set: payload });
+            res.sendStatus(202);
         } catch (e) {
             res.status(400).send({ 'Error': e.message });
         }
