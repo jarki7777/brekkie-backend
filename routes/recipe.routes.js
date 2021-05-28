@@ -7,5 +7,6 @@ const recipeRoutes = Router();
 
 recipeRoutes.post('/', recipeController.new);
 recipeRoutes.get('/index', recipeController.index);
+recipeRoutes.get('/find', recipeController.find);
 
 export default recipeRoutes;
