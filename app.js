@@ -6,6 +6,7 @@ import { connectMongoose } from './config/db.js';
 import userRoutes from './routes/user.routes.js';
 import authRoutes from './routes/auth.routes.js'
 import inventoryRoutes from './routes/inventory.routes.js';
+import shoppingListRoutes from './routes/shoppingList.routes.js';
 
 dotenv.config();
 
@@ -20,6 +21,7 @@ connectMongoose();
 app.use('/auth', authRoutes);
 app.use('/user', userRoutes);
 app.use('/inventory', inventoryRoutes);
+app.use('/shopping_list', shoppingListRoutes);
 
 app.listen(process.env.PORT, () => {
     console.log(`Server is running on port ${process.env.PORT}`);
