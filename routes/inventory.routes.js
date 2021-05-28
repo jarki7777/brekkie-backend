@@ -7,5 +7,6 @@ const inventoryRoutes = Router();
 inventoryRoutes.get('/', checkJwt, inventoryController.show);
 inventoryRoutes.post('/', checkJwt, inventoryController.add);
 inventoryRoutes.patch('/', checkJwt, inventoryController.remove);
+inventoryRoutes.put('/', checkJwt, inventoryController.empty);
 
 export default inventoryRoutes;
