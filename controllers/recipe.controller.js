@@ -1,3 +1,6 @@
+import Comment from '../models/comment.model.js';
+import Favorite from '../models/favorite.model.js';
+import FoodLog from '../models/foodLog.model.js';
 import Inventory from '../models/inventory.model.js';
 import Recipe from '../models/recipe.model.js';
 import { getTokenPayload } from '../util/getTokenPayload.js';
@@ -110,8 +113,21 @@ export const recipeController = {
             // Updates multiple fields, only update the fields for which query parameter isn't undefined
             Object.keys(payload).forEach(key => payload[key] === undefined ? delete payload[key] : {});
 
-            await Recipe.findByIdAndUpdate({ _id: id }, { $set: payload });
+            await Recipe.updateOne({ _id: id }, { $set: payload });
             res.sendStatus(202);
+        } catch (e) {
+            res.status(400).send({ 'Error': e.message });
+        }
+    },
+    delete: async (req, res) => {
+        try {
+            // Pull all elements from all documents arrays which contain the recipe ObjectId and delete all recipe comments
+            const id = req.params.id;
+            await Favorite.updateMany({ recipes: id }, { $pull: { recipes: id } });
+            await FoodLog.updateMany({ recipes: id }, { $pull: { recipes: id } });
+            await Comment.deleteMany({ recipe: id });
+            await Recipe.findByIdAndDelete({ _id: id });
+            res.sendStatus(204);
         } catch (e) {
             res.status(400).send({ 'Error': e.message });
         }
