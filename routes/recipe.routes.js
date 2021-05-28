@@ -8,6 +8,6 @@ const recipeRoutes = Router();
 recipeRoutes.post('/', checkJwt, checkMod, recipeController.new);
 recipeRoutes.get('/index', checkJwt, recipeController.index);
 recipeRoutes.get('/find', checkJwt, recipeController.find);
-recipeRoutes.get('/find_with_ingredient', checkJwt, recipeController.findWithIngredients);
+recipeRoutes.get('/find_with_ingredient', checkJwt, recipeController.findWithUserIngredients);
 
 export default recipeRoutes;

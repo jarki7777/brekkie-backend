@@ -40,8 +40,9 @@ export const userController = {
                 favorites: req.body.favorites
             }
 
+            // Updates multiple fields, only update the fields for which query parameter isn't undefined
             Object.keys(payload).forEach(key => payload[key] === undefined ? delete payload[key] : {});
-            
+
             await User.findByIdAndUpdate({ _id: id }, { $set: payload });
             res.sendStatus(202);
         } catch (e) {
@@ -50,6 +51,7 @@ export const userController = {
     },
     delete: async (req, res) => {
         try {
+            // Delete all documents which contain the user ObjectId
             const id = req.params.id;
             await Inventory.findOneAndDelete({ user: id });
             await ShoppingList.findOneAndDelete({ user: id });
