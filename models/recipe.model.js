@@ -1,4 +1,5 @@
 import mongoose from 'mongoose';
+import mongoosePaginate from 'mongoose-paginate';
 
 const RecipeSchema = new mongoose.Schema({
     title: {
@@ -97,6 +98,7 @@ const RecipeSchema = new mongoose.Schema({
     }]
 });
 
+RecipeSchema.plugin(mongoosePaginate);
 const Recipe = mongoose.model('Recipe', RecipeSchema, 'recipes');
 
 export default Recipe;
