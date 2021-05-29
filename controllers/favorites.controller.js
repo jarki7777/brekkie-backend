@@ -3,7 +3,7 @@ import Recipe from '../models/recipe.model.js';
 import { getTokenPayload } from "../util/getTokenPayload.js";
 
 export const favoritesController = {
-    new: async (req, res) => {
+    add: async (req, res) => {
         try {
             const tokenPayload = getTokenPayload(req.headers['authorization']);
             const id = tokenPayload.id;
@@ -15,7 +15,7 @@ export const favoritesController = {
             // Push recipe into user favorite document
             await Favorite.updateOne({ user: id }, { $addToSet: { recipes: recipe } });
 
-            res.status(201).send({ 'message': 'Added to user favorites' });
+            res.sendStatus(201);
         } catch (e) {
             res.status(400).send({ 'Error': e.message });
         }
@@ -27,6 +27,18 @@ export const favoritesController = {
             const favorites = await Favorite.findOne({ user: tokenPayload.id }).populate('recipes', 'title img');
 
             res.status(200).send(favorites);
+        } catch (e) {
+            res.status(400).send({ 'Error': e.message });
+        }
+    },
+    remove: async (req, res) => {
+        try {
+            const tokenPayload = getTokenPayload(req.headers['authorization']);
+            const recipe = req.params.id
+
+            await Favorite.updateOne({ user: tokenPayload.id }, { $pull: { recipes: recipe } });
+
+            res.sendStatus(202);
         } catch (e) {
             res.status(400).send({ 'Error': e.message });
         }
