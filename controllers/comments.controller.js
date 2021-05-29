@@ -24,7 +24,7 @@ export const commentsController = {
 
             const recipeComments = await Comment.paginate(
                 { recipe: req.params.id },
-                { page: page, limit: limit }
+                { page: page, limit: limit, populate: {'path': 'user recipe', select: 'username title'} }
             );
 
             res.status(200).send(recipeComments);
