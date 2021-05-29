@@ -4,6 +4,8 @@ import FoodLog from '../models/foodLog.model.js';
 import Inventory from '../models/inventory.model.js';
 import Recipe from '../models/recipe.model.js';
 import { getTokenPayload } from '../util/getTokenPayload.js';
+import mquery from 'mquery';
+import { connectMongoose } from '../config/db.js';
 
 export const recipeController = {
     new: async (req, res) => {
@@ -54,25 +56,37 @@ export const recipeController = {
         try {
             const page = parseInt(req.query.page);
             const limit = parseInt(req.query.limit);
-            const category = req.query.category;
-            const method = req.query.method;
 
             const tokenPayload = getTokenPayload(req.headers['authorization']);
             const userInventory = await Inventory.findOne({ user: tokenPayload.id }).lean();
             let inventory = userInventory.ingredients;
-            inventory = inventory.map((i) => new RegExp(i, "i"));
+            let inventoryStr = inventory.join("|");
 
-            // Find all recipes which inventory array intersects with the recipe ingredient
+            // Using mquery $expr aggregation operator to find all recipes which inventory array intersects with the recipe ingredient array
             const recipes = await Recipe.paginate(
                 {
-                    $and: [
-                        { category: category },
-                        { method: method },
-                        { ingredients: { $all: inventory } }
-                    ]
+                    $expr: {
+                        $eq: [
+                            {
+                                $size: {
+                                    $filter: {
+                                        input: "$ingredients",
+                                        cond: {
+                                            $regexMatch: {
+                                                input: "$$this",
+                                                regex: inventoryStr,
+                                                options: "i"
+                                            }
+                                        }
+                                    }
+                                }
+                            },
+                            { $size: "$ingredients" }
+                        ]
+                    }
                 },
                 { page: page, limit: limit }
-            );
+            )
 
             res.status(200).send(recipes);
         } catch (e) {
