@@ -10,12 +10,11 @@ export const favoritesController = {
             const recipe = req.params.id
 
             // Increase the timesFavorite recipe field
-            // const result = await Recipe.findById({ _id: recipe })
-            await Recipe.updateOne({ _id: recipe }, { $inc: { timesFavorite: 1 } });
+            // await Recipe.updateOne({ _id: recipe }, { $inc: { timesFavorite: 1 } });
             
-            // res.status(201).send({ result });
-            // await Favorite.create();
-            res.status(201).send({ 'message': 'Favorite created' });
+            await Favorite.updateOne({ user: id }, { $push: { recipes: recipe } });
+            
+            // res.status(201).send({ 'message': 'Favorite created' });
         } catch (e) {
             res.status(400).send({ 'Error': e.message });
         }
