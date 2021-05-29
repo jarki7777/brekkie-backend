@@ -15,13 +15,13 @@ const FoodLogSchema = new mongoose.Schema({
     }],
     totalCalories: Number,
     totalNutrients: {
-        totalFat: String,
-        totalSaturatedFat: String,
-        totalSodium: String,
-        totalCarbs: String,
-        totalFiber: String,
-        totalSugar: String,
-        totalProteins: String
+        totalFat: Number,
+        totalSaturatedFat: Number,
+        totalSodium: Number,
+        totalCarbs: Number,
+        totalFiber: Number,
+        totalSugar: Number,
+        totalProteins: Number
     }
 });
 

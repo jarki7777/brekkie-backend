@@ -2,6 +2,8 @@ import FoodLog from '../models/foodLog.model.js';
 import User from '../models/user.model.js'
 import { getTokenPayload } from "../util/getTokenPayload.js";
 import { formatDate } from '../util/formatDate.js';
+import { calculateTotalCalories } from '../util/calculateTotalCalories.js';
+import { calculateTotalNutrients } from '../util/calculateTotalNutrients.js';
 
 export const foodLogsController = {
     add: async (req, res) => {
@@ -21,6 +23,15 @@ export const foodLogsController = {
                 },
                 { user: tokenPayload.id, day: day, $addToSet: { recipes: req.params.id } },
                 { upsert: true, new: true }
+            ).populate('recipes', 'nutritionalInfo caloriesPerServe').lean();
+
+            const totalCalories = calculateTotalCalories(newFoodLog.recipes);
+            const totalNutrients = calculateTotalNutrients(newFoodLog.recipes);
+
+            // Update daily total calories and nutrients ingest
+            await FoodLog.findByIdAndUpdate(
+                { _id: newFoodLog._id },
+                { totalCalories: totalCalories, totalNutrients: totalNutrients }
             );
 
             // Push the new food log into user
@@ -31,7 +42,7 @@ export const foodLogsController = {
             res.status(400).send({ 'Error': e.message });
         }
     },
-    showByUser: async (req, res) => {
+    show: async (req, res) => {
         try {
             const tokenPayload = getTokenPayload(req.headers['authorization']);
             const page = parseInt(req.query.page);
@@ -54,7 +65,6 @@ export const foodLogsController = {
     },
     showByDay: async (req, res) => {
         try {
-            console.log('sadasd')
             const tokenPayload = getTokenPayload(req.headers['authorization']);
             const userFoodLog = await FoodLog.findOne(
                 {
@@ -68,7 +78,6 @@ export const foodLogsController = {
             res.status(200).send(userFoodLog);
         } catch (e) {
             res.status(400).send({ 'Error': e.message });
-
         }
     }
 }
