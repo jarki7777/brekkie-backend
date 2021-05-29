@@ -1,4 +1,5 @@
 import mongoose from 'mongoose';
+import mongoosePaginate from 'mongoose-paginate-v2';
 
 const FoodLogSchema = new mongoose.Schema({
     user: {
@@ -24,6 +25,7 @@ const FoodLogSchema = new mongoose.Schema({
     }
 });
 
+FoodLogSchema.plugin(mongoosePaginate);
 const FoodLog = mongoose.model('FoodLog', FoodLogSchema, 'food_logs');
 
 export default FoodLog;

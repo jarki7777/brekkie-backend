@@ -31,4 +31,25 @@ export const foodLogsController = {
             res.status(400).send({ 'Error': e.message });
         }
     },
+    showByUser: async (req, res) => {
+        try {
+            const tokenPayload = getTokenPayload(req.headers['authorization']);
+            const page = parseInt(req.query.page);
+            const limit = parseInt(req.query.limit);
+
+            const userFoodLogs = await FoodLog.paginate(
+                { user: tokenPayload.id },
+                {
+                    page: page, limit: limit, populate: {
+                        'path': 'user recipes',
+                        select: 'username title img'
+                    }
+                }
+            );
+
+            res.status(200).send(userFoodLogs);
+        } catch (e) {
+            res.status(400).send({ 'Error': e.message });
+        }
+    }
 }
