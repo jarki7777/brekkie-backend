@@ -5,6 +5,7 @@ import { checkAdmin, checkMod } from '../middleware/checkRole.js';
 
 const commentRoutes = Router();
 
-commentRoutes.post('/', commentsController.new);
+commentRoutes.post('/:id', checkJwt, commentsController.new);
+commentRoutes.get('/:id', checkJwt, checkMod, commentsController.showByRecipe);
 
 export default commentRoutes;

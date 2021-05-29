@@ -7,7 +7,7 @@ export const commentsController = {
             const tokenPayload = getTokenPayload(req.headers['authorization']);
             const newComment = {
                 user: tokenPayload.id,
-                recipe: req.body.recipe,
+                recipe: req.params.id,
                 comment: req.body.comment
             }
 
@@ -16,5 +16,20 @@ export const commentsController = {
         } catch (e) {
             res.status(400).send({ 'Error': e.message });
         }
+    },
+    showByRecipe: async (req, res) => {
+        try {
+            const page = parseInt(req.query.page);
+            const limit = parseInt(req.query.limit);
+
+            const recipeComments = await Comment.paginate(
+                { recipe: req.params.id },
+                { page: page, limit: limit }
+            );
+
+            res.status(200).send(recipeComments);
+        } catch (e) {
+            res.status(400).send({ 'Error': e.message });
+        }
     }
-} 
+}
