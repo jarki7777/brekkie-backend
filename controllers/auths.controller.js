@@ -5,7 +5,6 @@ import User from '../models/user.model.js';
 import Inventory from '../models/inventory.model.js';
 import ShoppingList from '../models/shoppinglist.model.js';
 import Favorite from '../models/favorite.model.js';
-import FoodLog from '../models/foodLog.model.js';
 
 export const authController = {
     signUp: async (req, res) => {
@@ -30,9 +29,8 @@ export const authController = {
                 const inventory = await Inventory.create({ user: newUser._id, ingredients: [] });
                 const shoppingList = await ShoppingList.create({ user: newUser._id, ingredients: [] });
                 const favorites = await Favorite.create({ user: newUser._id, recipes: [] });
-                const foodLog = await FoodLog.create({ user: newUser._id, day: null, recipes: [], totalCalories: null, totalNutrients: {} });
 
-                const payload = { inventory, shoppingList, favorites, foodLog }
+                const payload = { inventory, shoppingList, favorites }
                 await User.updateOne({ _id: newUser._id }, { $set: payload })
                 res.sendStatus(201);
             }

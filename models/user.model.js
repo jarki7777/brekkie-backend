@@ -53,10 +53,11 @@ const UserSchema = new mongoose.Schema({
         type: mongoose.Types.ObjectId,
         ref: 'Favorite'
     },
-    foodLog: {
+    foodLogs: [{
         type: mongoose.Types.ObjectId,
-        ref: 'User'
-    }
+        ref: 'User',
+        default: []
+    }]
 });
 
 UserSchema.plugin(mongoosePaginate);
