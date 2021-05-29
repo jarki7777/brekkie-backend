@@ -42,7 +42,7 @@ export const foodLogsController = {
             res.status(400).send({ 'Error': e.message });
         }
     },
-    show: async (req, res) => {
+    index: async (req, res) => {
         try {
             const tokenPayload = getTokenPayload(req.headers['authorization']);
             const page = parseInt(req.query.page);
@@ -76,6 +76,27 @@ export const foodLogsController = {
             ).populate('recipes', 'title img');
 
             res.status(200).send(userFoodLog);
+        } catch (e) {
+            res.status(400).send({ 'Error': e.message });
+        }
+    },
+    addServing: async (req, res) => {
+        try {
+            const tokenPayload = getTokenPayload(req.headers['authorization']);
+            let day = new Date();
+            day = formatDate(day);
+
+            await FoodLog.updateOne(
+                {
+                    $and: [
+                        { user: tokenPayload.id },
+                        { day: day }
+                    ]
+                },
+                { $inc: { totalCalories: req.query.calories } }
+            );
+
+            res.sendStatus(202);
         } catch (e) {
             res.status(400).send({ 'Error': e.message });
         }

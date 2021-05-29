@@ -6,6 +6,7 @@ const foodLogRoutes = Router();
 
 foodLogRoutes.post('/:id', checkJwt, foodLogsController.add);
 foodLogRoutes.get('/find/', checkJwt, foodLogsController.showByDay);
-foodLogRoutes.get('/:id', checkJwt, foodLogsController.show);
+foodLogRoutes.get('/:id', checkJwt, foodLogsController.index);
+foodLogRoutes.patch('/', checkJwt, foodLogsController.addServing);
 
 export default foodLogRoutes;
