@@ -12,7 +12,7 @@ const UserSchema = new mongoose.Schema({
 // can contain only letters, numbers and any of these non consecutive special characters '-._' 
                 return /^([a-z0-9]|[-._](?![-._])){4,20}$/i.test(v);
             },
-            message: props => `${props.value} is not a valid email`
+            message: props => `${props.value} is not a valid username`
         }
     },
     email: {
