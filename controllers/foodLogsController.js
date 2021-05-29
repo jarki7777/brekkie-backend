@@ -51,5 +51,24 @@ export const foodLogsController = {
         } catch (e) {
             res.status(400).send({ 'Error': e.message });
         }
+    },
+    showByDay: async (req, res) => {
+        try {
+            console.log('sadasd')
+            const tokenPayload = getTokenPayload(req.headers['authorization']);
+            const userFoodLog = await FoodLog.findOne(
+                {
+                    $and: [
+                        { user: tokenPayload.id },
+                        { day: req.query.date }
+                    ]
+                }
+            ).populate('recipes', 'title img');
+
+            res.status(200).send(userFoodLog);
+        } catch (e) {
+            res.status(400).send({ 'Error': e.message });
+
+        }
     }
 }

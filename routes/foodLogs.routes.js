@@ -5,6 +5,7 @@ import { checkJwt } from '../middleware/checkJwt.js';
 const foodLogRoutes = Router();
 
 foodLogRoutes.post('/:id', checkJwt, foodLogsController.add);
+foodLogRoutes.get('/find/', checkJwt, foodLogsController.showByDay);
 foodLogRoutes.get('/:id', checkJwt, foodLogsController.showByUser);
 
 export default foodLogRoutes;
