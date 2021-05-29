@@ -15,7 +15,7 @@ export const favoritesController = {
             // Push recipe into user favorite document
             await Favorite.updateOne({ user: id }, { $addToSet: { recipes: recipe } });
 
-            res.sendStatus(201);
+            res.sendStatus(202);
         } catch (e) {
             res.status(400).send({ 'Error': e.message });
         }

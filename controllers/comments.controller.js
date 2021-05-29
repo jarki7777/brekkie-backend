@@ -17,7 +17,7 @@ export const commentsController = {
             // Push the comment into recipe
             await Recipe.updateOne({ _id: req.params.id }, { $push: { comments: newComment._id } })
 
-            res.status(201).send({ 'message': 'Comment created' });
+            res.sendStatus(201);
         } catch (e) {
             res.status(400).send({ 'Error': e.message });
         }

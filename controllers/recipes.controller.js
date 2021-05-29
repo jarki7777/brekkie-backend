@@ -10,7 +10,7 @@ export const recipeController = {
         try {
             const newRecipe = req.body
             await Recipe.create(newRecipe);
-            res.status(201).send({ 'message': 'Recipe created' });
+            res.sendStatus(201);
         } catch (e) {
             res.status(400).send({ 'Error': e.message });
         }

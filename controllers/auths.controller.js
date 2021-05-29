@@ -34,7 +34,7 @@ export const authController = {
 
                 const payload = { inventory, shoppingList, favorites, foodLog }
                 await User.updateOne({ _id: newUser._id }, { $set: payload })
-                res.status(201).send({ 'message': 'User created' });
+                res.sendStatus(201);
             }
         } catch (e) {
             res.status(400).send({ 'Error': e.message, 'message': 'All fields are required' });
