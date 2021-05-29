@@ -67,7 +67,7 @@ export const userController = {
             await Inventory.findOneAndDelete({ user: id });
             await ShoppingList.findOneAndDelete({ user: id });
             await Favorite.findOneAndDelete({ user: id });
-            await FoodLog.findOneAndDelete({ user: id });
+            await FoodLog.deleteMany({ user: id });
             await Comment.deleteMany({ user: id });
             await User.findByIdAndDelete({ _id: id });
             res.sendStatus(204);

@@ -15,7 +15,7 @@ export const commentsController = {
             const newComment = await Comment.create(comment);
 
             // Push the comment into recipe
-            await Recipe.updateOne({ _id: req.params.id }, { $push: { comments: newComment._id } })
+            await Recipe.updateOne({ _id: req.params.id }, { $addToSet: { comments: newComment._id } })
 
             res.sendStatus(201);
         } catch (e) {
