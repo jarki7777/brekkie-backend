@@ -11,5 +11,10 @@ recipeRoutes.get('/find', checkJwt, recipeController.find);
 recipeRoutes.get('/find_by_inventory', checkJwt, recipeController.findWithUserIngredients);
 recipeRoutes.patch('/find/:id', checkJwt, checkMod, recipeController.update);
 recipeRoutes.delete('/find/:id', checkJwt, checkAdmin, recipeController.delete);
+recipeRoutes.patch('/one_star/:id', checkJwt, recipeController.voteOneStar);
+recipeRoutes.patch('/two_star/:id', checkJwt, recipeController.voteTwoStar);
+recipeRoutes.patch('/three_star/:id', checkJwt, recipeController.voteThreeStar);
+recipeRoutes.patch('/four_star/:id', checkJwt, recipeController.voteFourStar);
+recipeRoutes.patch('/five_star/:id', checkJwt, recipeController.voteFiveStar);
 
 export default recipeRoutes;

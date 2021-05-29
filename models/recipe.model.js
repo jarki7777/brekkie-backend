@@ -61,35 +61,35 @@ const RecipeSchema = new mongoose.Schema({
     },
     timesFavorite: {
         type: Number,
-        default: null
+        default: 0
     },
     oneStarVotes: {
         type: Number,
-        default: null
+        default: 0
     },
     twoStarVotes: {
         type: Number,
-        default: null
+        default: 0
     },
     threeStarVotes: {
         type: Number,
-        default: null
+        default: 0
     },
     fourStarVotes: {
         type: Number,
-        default: null
+        default: 0
     },
     fiveStarVotes: {
         type: Number,
-        default: null
+        default: 0
     },
     totalVotes: {
         type: Number,
-        default: null
+        default: 0
     },
     calification: {
         type: Number,
-        default: null
+        default: 0
     },
     comments: [{
         type: mongoose.Types.ObjectId,
