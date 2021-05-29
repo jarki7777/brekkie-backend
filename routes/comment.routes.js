@@ -7,5 +7,6 @@ const commentRoutes = Router();
 
 commentRoutes.post('/:id', checkJwt, commentsController.new);
 commentRoutes.get('/:id', checkJwt, checkMod, commentsController.showByRecipe);
+commentRoutes.delete('/:id', checkJwt, checkAdmin, commentsController.delete);
 
 export default commentRoutes;

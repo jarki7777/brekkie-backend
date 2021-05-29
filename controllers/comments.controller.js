@@ -31,5 +31,14 @@ export const commentsController = {
         } catch (e) {
             res.status(400).send({ 'Error': e.message });
         }
+    },
+    delete: async (req, res) => {
+        try {
+            const id = req.params.id;
+            await Comment.findByIdAndDelete({ _id: id });
+            res.sendStatus(204);
+        } catch (e) {
+            res.status(400).send({ 'Error': e.message });
+        }
     }
 }
