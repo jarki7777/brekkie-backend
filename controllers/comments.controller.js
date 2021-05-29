@@ -1,17 +1,22 @@
 import Comment from "../models/comment.model.js";
+import Recipe from '../models/recipe.model.js';
 import { getTokenPayload } from "../util/getTokenPayload.js";
 
 export const commentsController = {
     new: async (req, res) => {
         try {
             const tokenPayload = getTokenPayload(req.headers['authorization']);
-            const newComment = {
+            const comment = {
                 user: tokenPayload.id,
                 recipe: req.params.id,
                 comment: req.body.comment
             }
 
-            await Comment.create(newComment);
+            const newComment = await Comment.create(comment);
+
+            // Push the comment into recipe
+            await Recipe.updateOne({ _id: req.params.id }, { $push: { comments: newComment._id } })
+
             res.status(201).send({ 'message': 'Comment created' });
         } catch (e) {
             res.status(400).send({ 'Error': e.message });
@@ -24,7 +29,7 @@ export const commentsController = {
 
             const recipeComments = await Comment.paginate(
                 { recipe: req.params.id },
-                { page: page, limit: limit, populate: {'path': 'user recipe', select: 'username title'} }
+                { page: page, limit: limit, populate: { 'path': 'user recipe', select: 'username title' } }
             );
 
             res.status(200).send(recipeComments);
