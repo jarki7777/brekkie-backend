@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { shoppingListController } from '../controllers/shoppingList.controller.js';
+import { shoppingListController } from '../controllers/shoppingLists.controller.js';
 import { checkJwt } from '../middleware/checkJwt.js';
 
 const shoppingListRoutes = Router();

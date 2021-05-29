@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { inventoryController } from '../controllers/inventory.controller.js';
+import { inventoryController } from '../controllers/inventories.controller.js';
 import { checkJwt } from '../middleware/checkJwt.js';
 
 const inventoryRoutes = Router();

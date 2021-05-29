@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { userController } from '../controllers/user.controller.js';
+import { userController } from '../controllers/users.controller.js';
 import { checkJwt } from '../middleware/checkJwt.js';
 import { checkAdmin, checkMod } from '../middleware/checkRole.js';
 

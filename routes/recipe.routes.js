@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { recipeController } from '../controllers/recipe.controller.js';
+import { recipeController } from '../controllers/recipes.controller.js';
 import { checkJwt } from '../middleware/checkJwt.js';
 import { checkAdmin, checkMod } from '../middleware/checkRole.js';
 

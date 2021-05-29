@@ -4,8 +4,6 @@ import FoodLog from '../models/foodLog.model.js';
 import Inventory from '../models/inventory.model.js';
 import Recipe from '../models/recipe.model.js';
 import { getTokenPayload } from '../util/getTokenPayload.js';
-import mquery from 'mquery';
-import { connectMongoose } from '../config/db.js';
 
 export const recipeController = {
     new: async (req, res) => {
@@ -62,7 +60,7 @@ export const recipeController = {
             let inventory = userInventory.ingredients;
             let inventoryStr = inventory.join("|");
 
-            // Using mquery $expr aggregation operator to find all recipes which inventory array intersects with the recipe ingredient array
+            // Using query $expr aggregation operator to find all recipes which inventory array intersects with the recipe ingredient array
             const recipes = await Recipe.paginate(
                 {
                     $expr: {
