@@ -4,8 +4,7 @@ import FoodLog from '../models/foodLog.model.js';
 import Inventory from '../models/inventory.model.js';
 import Recipe from '../models/recipe.model.js';
 import { getTokenPayload } from '../util/getTokenPayload.js';
-import mquery from 'mquery';
-import { connectMongoose } from '../config/db.js';
+import { calculateCalification } from '../util/calculateRecipeCalification.js'
 
 export const recipeController = {
     new: async (req, res) => {
@@ -145,5 +144,90 @@ export const recipeController = {
         } catch (e) {
             res.status(400).send({ 'Error': e.message });
         }
-    }
+    },
+    voteOneStar: async (req, res) => {
+        try {
+            const id = req.params.id;
+
+            const recipe = await Recipe.findOneAndUpdate(
+                { _id: id },
+                { $inc: { oneStarVotes: 1, totalVotes: 1 } },
+                { new: true }
+            ).lean();
+
+            const calification = calculateCalification(recipe);
+            await Recipe.updateOne({ _id: id }, { calification });
+            res.sendStatus(202);
+        } catch (e) {
+            res.status(400).send({ 'Error': e.message });
+        }
+    },
+    voteTwoStar: async (req, res) => {
+        try {
+            const id = req.params.id;
+
+            const recipe = await Recipe.findOneAndUpdate(
+                { _id: id },
+                { $inc: { twoStarVotes: 1, totalVotes: 1 } },
+                { new: true }
+            ).lean();
+
+            const calification = calculateCalification(recipe);
+            await Recipe.updateOne({ _id: id }, { calification });
+            res.sendStatus(202);
+        } catch (e) {
+            res.status(400).send({ 'Error': e.message });
+        }
+    },
+    voteThreeStar: async (req, res) => {
+        try {
+            const id = req.params.id;
+
+            const recipe = await Recipe.findOneAndUpdate(
+                { _id: id },
+                { $inc: { threeStarVotes: 1, totalVotes: 1 } },
+                { new: true }
+            ).lean();
+
+            const calification = calculateCalification(recipe);
+            await Recipe.updateOne({ _id: id }, { calification });
+            res.sendStatus(202);
+        } catch (e) {
+            res.status(400).send({ 'Error': e.message });
+        }
+    },
+    voteFourStar: async (req, res) => {
+        try {
+            const id = req.params.id;
+
+            const recipe = await Recipe.findOneAndUpdate(
+                { _id: id },
+                { $inc: { fourStarVotes: 1, totalVotes: 1 } },
+                { new: true }
+            ).lean();
+
+            const calification = calculateCalification(recipe);
+            await Recipe.updateOne({ _id: id }, { calification });
+            res.sendStatus(202);
+        } catch (e) {
+            res.status(400).send({ 'Error': e.message });
+        }
+    },
+    voteFiveStar: async (req, res) => {
+        try {
+            const id = req.params.id;
+
+            const recipe = await Recipe.findOneAndUpdate(
+                { _id: id },
+                { $inc: { fiveStarVotes: 1, totalVotes: 1 } },
+                { new: true }
+            ).lean();
+
+            const calification = calculateCalification(recipe);
+            await Recipe.updateOne({ _id: id }, { calification });
+            res.sendStatus(202);
+        } catch (e) {
+            res.status(400).send({ 'Error': e.message });
+        }
+    },
 }
