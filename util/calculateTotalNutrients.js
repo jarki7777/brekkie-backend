@@ -10,8 +10,7 @@ export const calculateTotalNutrients = (recipes) => {
     const getAllTotalMacronutrients = (arr, nutrientName) => {
 
         for (const elements of recipes) {
-            arr.push(Number(elements.nutritionalInfo[nutrientName].replace(/g|mg/g, '')))
-
+            arr.push(Number(elements.nutritionalInfo[nutrientName].replace(/g|mg/g, '')));
         }
         const getTotalNutrient = (nutrient) => {
             return nutrient.reduce((total, num) => {
