@@ -1,9 +1,11 @@
 import FoodLog from '../models/foodLog.model.js';
-import User from '../models/user.model.js'
+import User from '../models/user.model.js';
+import Recipe from '../models/recipe.model.js';
 import { getTokenPayload } from "../util/getTokenPayload.js";
 import { formatDate } from '../util/formatDate.js';
 import { calculateTotalCalories } from '../util/calculateTotalCalories.js';
 import { calculateTotalNutrients } from '../util/calculateTotalNutrients.js';
+import { getRecipeNutrientValues } from '../util/getRecipeNutrientValues.js';
 
 export const foodLogsController = {
     add: async (req, res) => {
@@ -83,8 +85,14 @@ export const foodLogsController = {
     addServing: async (req, res) => {
         try {
             const tokenPayload = getTokenPayload(req.headers['authorization']);
+            const recipeId = req.params.id;
             let day = new Date();
             day = formatDate(day);
+
+            const recipe = await Recipe.findById({ _id: recipeId }).lean();
+            const recipeCaloriesPerServe = recipe.caloriesPerServe;
+            const recipeNutritionalInfo = recipe.nutritionalInfo;
+            getRecipeNutrientValues(recipeNutritionalInfo);
 
             await FoodLog.updateOne(
                 {
@@ -93,7 +101,18 @@ export const foodLogsController = {
                         { day: day }
                     ]
                 },
-                { $inc: { totalCalories: req.query.calories } }
+                {
+                    $inc: {
+                        totalCalories: recipeCaloriesPerServe,
+                        "totalNutrients.totalFat": recipeNutritionalInfo.fat,
+                        "totalNutrients.totalSaturatedFat": recipeNutritionalInfo.saturatedFat,
+                        "totalNutrients.totalSodium": recipeNutritionalInfo.sodium,
+                        "totalNutrients.totalCarbs": recipeNutritionalInfo.carbs,
+                        "totalNutrients.totalFiber": recipeNutritionalInfo.fiber,
+                        "totalNutrients.totalSugar": recipeNutritionalInfo.sugar,
+                        "totalNutrients.totalProteins": recipeNutritionalInfo.protein,
+                    }
+                }
             );
 
             res.sendStatus(202);
