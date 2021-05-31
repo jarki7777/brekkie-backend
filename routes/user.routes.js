@@ -5,7 +5,8 @@ import { checkAdmin, checkMod } from '../middleware/checkRole.js';
 
 const userRoutes = Router();
 
-userRoutes.get('/index', checkJwt, checkMod, userController.index);
+//userRoutes.get('/index', checkJwt, checkMod, userController.index);
+userRoutes.get('/index', checkRole('admin'), userController.index);
 userRoutes.get('/find/:id', checkJwt, checkMod, userController.show);
 userRoutes.get('/profile', checkJwt, userController.profile);
 userRoutes.patch('/find/:id', checkJwt, checkMod, userController.update);
