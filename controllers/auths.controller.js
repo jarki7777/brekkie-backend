@@ -1,5 +1,6 @@
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcrypt';
+import { validatePw } from '../util/validatePw.js';
 import User from '../models/user.model.js';
 import Inventory from '../models/inventory.model.js';
 import ShoppingList from '../models/shoppinglist.model.js';
@@ -11,9 +12,11 @@ export const authController = {
             const { username, email, password } = req.body;
             const emailNotAvailable = await User.findOne({ email });
             const usernameNotAvailable = await User.findOne({ username });
+            const checkPw = validatePw(password);
 
             if (emailNotAvailable) res.status(409).send({ 'message': 'Email already exist' });
             else if (usernameNotAvailable) res.status(409).send({ 'message': 'Username already exist' });
+            else if (!checkPw) res.status(400).send({ 'message': 'Password does not meet the criteria' });
 
             const userData = {
                 email: email,
@@ -21,7 +24,7 @@ export const authController = {
                 password: bcrypt.hashSync(password, 10)
             }
 
-            if (!emailNotAvailable, !usernameNotAvailable) {
+            if (!emailNotAvailable, !usernameNotAvailable, checkPw) {
                 const newUser = await User.create(userData);
                 const inventory = await Inventory.create({ user: newUser._id, ingredients: [] });
                 const shoppingList = await ShoppingList.create({ user: newUser._id, ingredients: [] });
