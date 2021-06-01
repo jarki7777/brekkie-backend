@@ -8,8 +8,8 @@ const UserSchema = new mongoose.Schema({
         unique: true,
         validate: {
             validator: function (v) {
-// username can't contain whitespaces must be between 4 and 20 characters,
-// can contain only letters, numbers and any of these non consecutive special characters '-._' 
+                // username can't contain whitespaces must be between 4 and 20 characters,
+                // can contain only letters, numbers and any of these non consecutive special characters '-._' 
                 return /^([a-z0-9]|[-._](?![-._])){4,20}$/i.test(v);
             },
             message: props => `${props.value} is not a valid username`
@@ -21,7 +21,7 @@ const UserSchema = new mongoose.Schema({
         unique: true,
         validate: {
             validator: function (v) {
-// email must be a valid email string
+                // email must be a valid email string
                 return /^(([^<>()[\]\.,;:\s@\"]+(\.[^<>()[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i.test(v);
             },
             message: props => `${props.value} is not a valid email`
@@ -30,7 +30,12 @@ const UserSchema = new mongoose.Schema({
     password: {
         type: String,
         required: true,
-        unique: true
+        validate: {
+            validator: function (v) {
+                return /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!#$%&?¿¡*-+.,:;<>/])[A-Za-z\d[!#$%&?¿¡*-+.,:;<>/]{8,32}$/gm.test(v);
+            },
+            message: props => `Password does not meet the criteria`
+        }
     },
     role: {
         type: String,

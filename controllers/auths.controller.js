@@ -1,6 +1,5 @@
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcrypt';
-import { validatePw } from '../util/validatePw.js';
 import User from '../models/user.model.js';
 import Inventory from '../models/inventory.model.js';
 import ShoppingList from '../models/shoppinglist.model.js';
@@ -12,11 +11,9 @@ export const authController = {
             const { username, email, password } = req.body;
             const emailNotAvailable = await User.findOne({ email });
             const usernameNotAvailable = await User.findOne({ username });
-            const checkPw = validatePw(password);
 
             if (emailNotAvailable) res.status(409).send({ 'message': 'Email already exist' });
             else if (usernameNotAvailable) res.status(409).send({ 'message': 'Username already exist' });
-            else if (!checkPw) res.status(400).send({ 'message': 'Password does not meet the criteria' });
 
             const userData = {
                 email: email,
@@ -24,7 +21,7 @@ export const authController = {
                 password: bcrypt.hashSync(password, 10)
             }
 
-            if (!emailNotAvailable, !usernameNotAvailable, checkPw) {
+            if (!emailNotAvailable, !usernameNotAvailable) {
                 const newUser = await User.create(userData);
                 const inventory = await Inventory.create({ user: newUser._id, ingredients: [] });
                 const shoppingList = await ShoppingList.create({ user: newUser._id, ingredients: [] });
@@ -35,7 +32,7 @@ export const authController = {
                 res.sendStatus(201);
             }
         } catch (e) {
-            res.status(400).send({ 'Error': e.message, 'message': 'All fields are required' });
+            res.status(400).send({ 'Error': e.message });
         }
     },
     login: async (req, res) => {
@@ -58,7 +55,7 @@ export const authController = {
                 const getRole = getUser.role;
                 const jwtPayload = { id: getUser._id, getRole };
                 const token = jwt.sign(jwtPayload, process.env.JWT_SECRET, { expiresIn: '7d' });
-                res.status(200).json({ token });
+                res.status(200).json({ token, role: getUser.role  });
             }
         } catch (e) {
             res.status(400).send({ 'Error': e.message, 'message': 'All fields are required' });
