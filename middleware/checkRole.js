@@ -1,5 +1,4 @@
 import Users from '../models/user.model.js';
-import jwt from 'jsonwebtoken';
 import { getTokenPayload } from '../util/getTokenPayload.js';
 
 export const checkAdmin = async (req, res, next) => {

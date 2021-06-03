@@ -9,11 +9,12 @@ export const favoritesController = {
             const id = tokenPayload.id;
             const recipe = req.params.id
 
-            // Increase the timesFavorite recipe field
-            await Recipe.updateOne({ _id: recipe }, { $inc: { timesFavorite: 1 } });
-
+            
             // Push recipe into user favorite document
-            await Favorite.updateOne({ user: id }, { $addToSet: { recipes: recipe } });
+            const fav = await Favorite.updateOne({ user: id }, { $addToSet: { recipes: recipe } });
+
+            // Increase the timesFavorite recipe field
+            if (fav.nModified !== 0) await Recipe.updateOne({ _id: recipe }, { $inc: { timesFavorite: 1 } });
 
             res.sendStatus(202);
         } catch (e) {
@@ -36,7 +37,8 @@ export const favoritesController = {
             const tokenPayload = getTokenPayload(req.headers['authorization']);
             const recipe = req.params.id
 
-            await Favorite.updateOne({ user: tokenPayload.id }, { $pull: { recipes: recipe } });
+            const fav = await Favorite.updateOne({ user: tokenPayload.id }, { $pull: { recipes: recipe } });
+            if (fav.nModified !== 0) await Recipe.updateOne({ _id: recipe }, { $inc: { timesFavorite: -1 } });
 
             res.sendStatus(202);
         } catch (e) {

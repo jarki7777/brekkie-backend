@@ -26,6 +26,14 @@ export const recipeController = {
             res.status(400).send({ 'Error': e.message });
         }
     },
+    findById: async (req, res) => {
+        try {
+            const recipe = await Recipe.findOne({ _id: req.params.id });
+            res.status(200).send(recipe);
+        } catch (e) {
+            res.status(400).send({ 'Error': e.message });
+        }
+    },
     find: async (req, res) => {
         try {
             const page = parseInt(req.query.page);
