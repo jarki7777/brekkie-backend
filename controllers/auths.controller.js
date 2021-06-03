@@ -14,9 +14,9 @@ export const authController = {
             const usernameNotAvailable = await User.findOne({ username });
             const checkPw = validatePw(password);
 
-            if (emailNotAvailable) res.status(409).send({ 'message': 'Email already exist' });
-            else if (usernameNotAvailable) res.status(409).send({ 'message': 'Username already exist' });
-            else if (!checkPw) res.status(400).send({ 'message': 'Password does not meet the criteria' });
+            if (usernameNotAvailable) res.status(409).send({ 'message': 'Username already exist' });
+            else if (emailNotAvailable) res.status(409).send({ 'message': 'Email already exist' });
+            else if (!checkPw) res.status(409).send({ 'message': 'Password does not meet the criteria' });
 
             const userData = {
                 email: email,
