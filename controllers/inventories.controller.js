@@ -34,7 +34,7 @@ export const inventoryController = {
     empty: async (req, res) => {
         try {
             const tokenPayload = getTokenPayload(req.headers['authorization']);
-            await Inventory.updateOne({ user: tokenPayload.id }, { $set: { ingredienst: [] } });
+            await Inventory.updateOne({ user: tokenPayload.id }, { $set: { ingredients: [] } });
             res.sendStatus(202);
         } catch (e) {
             res.status(400).send({ 'Error': e.message });
