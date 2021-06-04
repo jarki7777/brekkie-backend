@@ -25,7 +25,8 @@ export const favoritesController = {
         try {
             const tokenPayload = getTokenPayload(req.headers['authorization']);
 
-            const favorites = await Favorite.findOne({ user: tokenPayload.id }).populate('recipes', 'title img');
+            const favorites = await Favorite.findOne({ user: tokenPayload.id })
+            .populate('recipes', 'title img caloriesPerServe timesFavorite calification totalVotes');
 
             res.status(200).send(favorites);
         } catch (e) {
