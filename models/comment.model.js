@@ -17,11 +17,12 @@ const CommentSchema = new mongoose.Schema({
         required: true,
         validate: {
             validator: function (v) {
-                return /^.{1,255}$/.test(v);
+                return /^.{2,255}$/.test(v);
             },
             message: 'comment must be between 1 and 255 chars'
         }
-    }
+    },
+    date: Date
 });
 
 CommentSchema.plugin(mongoosePaginate);
