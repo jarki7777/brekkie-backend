@@ -9,7 +9,8 @@ export const commentsController = {
             const comment = {
                 user: tokenPayload.id,
                 recipe: req.params.id,
-                comment: req.body.comment
+                comment: req.body.comment,
+                date: Date.now()
             }
 
             const newComment = await Comment.create(comment);
@@ -29,7 +30,11 @@ export const commentsController = {
 
             const recipeComments = await Comment.paginate(
                 { recipe: req.params.id },
-                { page: page, limit: limit, populate: { 'path': 'user recipe', select: 'username title' } }
+                {
+                    page: page, limit: limit,
+                    populate: { 'path': 'user recipe', select: 'username title' },
+                    sort: { date: -1 }
+                }
             );
 
             res.status(200).send(recipeComments);
