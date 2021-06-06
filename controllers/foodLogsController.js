@@ -55,7 +55,7 @@ export const foodLogsController = {
                 {
                     page: page, limit: limit, populate: {
                         'path': 'user recipes',
-                        select: 'username title img'
+                        select: 'title img timesFavorite calification totalVotes caloriesPerServe'
                     }
                 }
             );
@@ -75,7 +75,7 @@ export const foodLogsController = {
                         { day: req.query.date }
                     ]
                 }
-            ).populate('recipes', 'title img');
+            ).populate('recipes', 'title img timesFavorite calification totalVotes caloriesPerServe');
 
             res.status(200).send(userFoodLog);
         } catch (e) {
