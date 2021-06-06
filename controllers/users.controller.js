@@ -31,14 +31,14 @@ export const userController = {
             const tokenPayload = getTokenPayload(req.headers['authorization']);
             const user = await User.findById({ _id: tokenPayload.id })
             .populate('favorites inventory shoppingList', 'recipes');
-            res.status(200).send({ user });
+            res.status(200).send(user);
         } catch (e) {
             res.status(400).send({ 'Error': e.message });
         }
     },
     update: async (req, res) => {
         try {
-            const id = req.params.id;
+            const tokenPayload = getTokenPayload(req.headers['authorization']);
 
             const payload = {
                 username: req.body.username,
@@ -54,7 +54,7 @@ export const userController = {
             // Updates multiple fields, only update the fields for which query parameter isn't undefined
             Object.keys(payload).forEach(key => payload[key] === undefined ? delete payload[key] : {});
 
-            await User.updateOne({ _id: id }, { $set: payload });
+            await User.updateOne({ _id: tokenPayload.id }, { $set: payload });
             res.sendStatus(202);
         } catch (e) {
             res.status(400).send({ 'Error': e.message });
