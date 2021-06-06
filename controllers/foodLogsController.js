@@ -86,13 +86,15 @@ export const foodLogsController = {
         try {
             const tokenPayload = getTokenPayload(req.headers['authorization']);
             const recipeId = req.params.id;
-            let day = new Date();
+            let day = req.params.day;
             day = formatDate(day);
 
             const recipe = await Recipe.findById({ _id: recipeId }).lean();
             const recipeCaloriesPerServe = recipe.caloriesPerServe;
             const recipeNutritionalInfo = recipe.nutritionalInfo;
             getRecipeNutrientValues(recipeNutritionalInfo);
+
+            console.log(recipeNutritionalInfo);
 
             await FoodLog.updateOne(
                 {
