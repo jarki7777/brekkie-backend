@@ -119,5 +119,28 @@ export const foodLogsController = {
         } catch (e) {
             res.status(400).send({ 'Error': e.message });
         }
+    },
+    showByDateRange: async (req, res) => {
+        try {
+            const tokenPayload = getTokenPayload(req.headers['authorization']);
+            const userFoodLog = await FoodLog.find({
+                $and:
+                    [
+                        { user: tokenPayload.id },
+                        {
+                            day:
+                            {
+                                $gte: new Date(new Date(req.query.from).setHours(0, 0, 0)),
+                                $lt: new Date(new Date(req.query.to).setHours(23, 59, 59))
+                            }
+                        }
+
+                    ]
+            });
+
+            res.status(200).send(userFoodLog);
+        } catch (e) {
+            res.status(400).send({ 'Error': e.message });
+        }
     }
 }
