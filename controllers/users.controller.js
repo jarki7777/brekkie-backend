@@ -9,10 +9,18 @@ import { getTokenPayload } from '../util/getTokenPayload.js';
 export const userController = {
     index: async (req, res) => {
         try {
+            const email = req.query.email
             const page = parseInt(req.query.page);
             const limit = parseInt(req.query.limit);
-            const userList = await User.paginate({}, { page: page, limit: limit });
-            res.status(200).send({ userList });
+            const userList = await User.paginate({
+                $or: [
+                    { email: { $regex: email, $options: 'm' } },
+                    { email: { $regex: email, $options: 'i' } },
+                    { email: { $regex: email, $options: 'x' } },
+                    { email: { $regex: email, $options: 's' } }
+                ]
+            }, { page: page, limit: limit });
+            res.status(200).send(userList);
         } catch (e) {
             res.status(400).send({ 'Error': e.message });
         }
