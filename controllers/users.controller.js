@@ -5,6 +5,7 @@ import FoodLog from '../models/foodLog.model.js';
 import Comment from '../models/comment.model.js';
 import User from '../models/user.model.js';
 import { getTokenPayload } from '../util/getTokenPayload.js';
+import bcrypt from 'bcrypt';
 
 export const userController = {
     index: async (req, res) => {
@@ -51,7 +52,7 @@ export const userController = {
             const payload = {
                 username: req.body.username,
                 email: req.body.email,
-                password: req.body.password,
+                password: bcrypt.hashSync(req.body.password, 10),
                 role: req.body.role,
                 caloriesGoal: req.body.caloriesGoal,
                 inventory: req.body.inventory,
