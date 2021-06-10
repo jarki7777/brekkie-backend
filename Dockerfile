@@ -11,5 +11,3 @@ RUN mongoimport --uri mongodb://mongodb:27017/brekkie --collection favorites --t
 COPY . /brekkie-backend
 EXPOSE 5000:5000
 CMD ["npm", "start"]
-
-# mongodb://localhost:27017/kitchen-leader
