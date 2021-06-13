@@ -68,18 +68,23 @@ export const foodLogsController = {
     showByDay: async (req, res) => {
         try {
             const tokenPayload = getTokenPayload(req.headers['authorization']);
+            
             const userFoodLog = await FoodLog.findOne(
                 {
-                    $and: [
-                        { user: tokenPayload.id },
-                        { day: req.query.date }
-                    ]
+                    user: tokenPayload.id,
+                    day:
+                        {
+                            $gte: new Date(new Date(req.query.date).setHours(0, 0, 0)),
+                            $lt: new Date(new Date(req.query.date).setHours(23, 59, 59))
+                        }
                 }
-            ).populate('recipes', 'title img timesFavorite calification totalVotes caloriesPerServe');
+            ).populate('recipes', 'title img timesFavorite calification totalVotes caloriesPerServe').lean();
 
+            console.log("userFoodLog: " + userFoodLog);
             res.status(200).send(userFoodLog);
         } catch (e) {
-            res.status(400).send({ 'Error': e.message });
+            res.status(400).send({ 'Error': e.message }); 
+
         }
     },
     addServing: async (req, res) => {
