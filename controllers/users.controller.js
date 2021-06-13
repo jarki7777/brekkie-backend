@@ -48,11 +48,13 @@ export const userController = {
     update: async (req, res) => {
         try {
             const tokenPayload = getTokenPayload(req.headers['authorization']);
+            let password
+            if (req.body.password) password = bcrypt.hashSync(req.body.password, 10);
 
             const payload = {
                 username: req.body.username,
                 email: req.body.email,
-                password: bcrypt.hashSync(req.body.password, 10),
+                password: password,
                 role: req.body.role,
                 caloriesGoal: req.body.caloriesGoal,
                 inventory: req.body.inventory,
@@ -60,6 +62,7 @@ export const userController = {
                 favorites: req.body.favorites
             }
 
+            console.log(payload);
             // Updates multiple fields, only update the fields for which query parameter isn't undefined
             Object.keys(payload).forEach(key => payload[key] === undefined ? delete payload[key] : {});
 
